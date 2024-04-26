@@ -53,7 +53,14 @@ const UserHeader = () => {
               </Text>
             </Flex>
           </Box>
-          <Avatar name="Mark Zukerberg" src="/zuck-avatar.png" size={"xl"} />
+          <Avatar
+            name="Mark Zukerberg"
+            src="/zuck-avatar.png"
+            size={{
+              base: "md",
+              md: "xl",
+            }}
+          />
         </Flex>
         <Text>
           Co-founder, excetuive officer of threads and ceo of facebook
