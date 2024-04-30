@@ -44,6 +44,7 @@ exports.registerUser = async (req, res) => {
   }
 };
 
+
 exports.loginUser = async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -82,6 +83,26 @@ exports.loginUser = async (req, res) => {
     });
   }
 };
+
+
+
+exports.getMyProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    return res.status(200).json({
+      success: true,
+      user,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+      error,
+    });
+  }
+};
+
+
 
 exports.logoutUser = async (req, res) => {
   res
