@@ -44,7 +44,6 @@ exports.registerUser = async (req, res) => {
   }
 };
 
-
 exports.loginUser = async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -84,8 +83,6 @@ exports.loginUser = async (req, res) => {
   }
 };
 
-
-
 exports.getMyProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
@@ -101,8 +98,6 @@ exports.getMyProfile = async (req, res) => {
     });
   }
 };
-
-
 
 exports.logoutUser = async (req, res) => {
   res
