@@ -12,14 +12,6 @@ const transporter = nodemailer.createTransport({
 });
 
 const sendWelcomeEmail = (email) => {
-  //   const transporter = nodemailer.createTransport({
-  //     service: "gmail",
-  //     auth: {
-  //       user: "phritik06@gmail.com",
-  //       pass: "hritik@12345",
-  //     },
-  //   });
-
   const mailOptions = {
     from: "phritik@gmail.com",
     to: "phritik@gmail.com",
