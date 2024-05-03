@@ -146,6 +146,7 @@ exports.deleteUser = async (req, res) => {
   }
 };
 
+
 exports.followUnfollowUser = async (req, res) => {
   try {
     const { id } = req.params;
