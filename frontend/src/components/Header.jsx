@@ -1,8 +1,11 @@
 import { Flex, Image, useColorMode } from "@chakra-ui/react";
 import React from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const Header = () => {
   const { colorMode, toggleColorMode } = useColorMode();
+
+  
   return (
     <>
       <Flex justifyContent={"center"} mt={6} mb={"12"}>
@@ -13,6 +16,9 @@ const Header = () => {
           alt="logo"
           onClick={toggleColorMode}
         />
+        <Link to={"/adjsdjsd"}>
+          <button>Visit Profile Page</button>
+        </Link>
       </Flex>
     </>
   );

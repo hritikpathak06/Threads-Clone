@@ -21,7 +21,7 @@ router.route("/me").get(isAuthenticated, getMyProfile);
 
 router.route("/logout").post(isAuthenticated, logoutUser);
 
-router.route("/all").get(isAuthenticated, getAllUsers);
+router.route("/all").get( getAllUsers);
 
 router.route("/follow/:id").post(isAuthenticated, followUnfollowUser);
 

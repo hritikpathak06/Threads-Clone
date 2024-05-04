@@ -45,6 +45,7 @@ exports.registerUser = async (req, res) => {
   }
 };
 
+
 exports.loginUser = async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -63,10 +64,17 @@ exports.loginUser = async (req, res) => {
       });
     }
     const token = await user.generateToken();
+    // res.cookie("token", token, {
+    //   httpOnly: true,
+    //   maxAge: 15 * 24 * 60 * 60 * 1000,
+    //   secure:true,
+    //   sameSite: "None",
+    // });
     res.cookie("token", token, {
-      httpOnly: true,
       maxAge: 15 * 24 * 60 * 60 * 1000,
-      sameSite: "strict",
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
     });
     return res.status(200).json({
       success: true,
