@@ -9,13 +9,22 @@ const userRoutes = require("./routes/userRoutes");
 const postRoutes = require("./routes/postRoutes");
 const app = express();
 const path = require("path");
+const cloudinary = require("cloudinary");
+
+
+// Clodinary Config
+cloudinary.v2.config({
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 
 // Midllewares
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.json({limit:"100mb"}));
-app.use(bodyParser.urlencoded({extended:true,limit:"100mb"}));
+app.use(express.json({ limit: "100mb" }));
+app.use(bodyParser.urlencoded({ extended: true, limit: "100mb" }));
 
 // Routes Config
 app.use("/api/v1/user", userRoutes);
@@ -26,15 +35,13 @@ app.use("/api/v1/post", postRoutes);
 //   res.send("Server Working on ");
 // });
 
-
 // *********************************************************Deployement*********************************************************
 const dirname1 = path.resolve();
-app.use(express.static(path.join(dirname1,"/frontend/dist")));
-app.get("*",(req,res) => {
-  res.sendFile(path.resolve(dirname1,"frontend","dist","index.html"))
-})
+app.use(express.static(path.join(dirname1, "/frontend/dist")));
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(dirname1, "frontend", "dist", "index.html"));
+});
 // *********************************************************Deployement*********************************************************
-
 
 const port = process.env.PORT || 10000;
 

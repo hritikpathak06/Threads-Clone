@@ -16,7 +16,7 @@ import { NavLink } from "react-router-dom";
 import { BsInstagram } from "react-icons/bs";
 import { CgMoreO } from "react-icons/cg";
 
-const UserHeader = () => {
+const UserHeader = ({user}) => {
   const toast = useToast();
 
   const copyUrl = () => {

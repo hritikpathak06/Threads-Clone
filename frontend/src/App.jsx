@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "./redux/slices/authSlice";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import Homepage from "./pages/Homepage";
+import MyProfilePage from "./pages/MyProfilePage";
 
 const UserPage = lazy(() => import("./pages/UserPage"));
 const PostPage = lazy(() => import("./pages/PostPage"));
@@ -41,6 +42,7 @@ const App = () => {
         <Header />
         <Routes>
           <Route path="/" element={<Homepage user={user} />} />
+          <Route path="/myProfile" element={<MyProfilePage user={user} />} />
           <Route path="/auth" element={<AuthPage user={user} />} />
           <Route path="/:username" element={<UserPage />} />
           <Route

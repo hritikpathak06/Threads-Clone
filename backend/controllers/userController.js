@@ -1,9 +1,11 @@
 const { default: mongoose } = require("mongoose");
 const User = require("../schemas/userSchema");
+const cloudinary = require("cloudinary");
 
 exports.registerUser = async (req, res) => {
   try {
-    const { name, email, username, password } = req.body;
+    const { name, email, username, password, profilePic } = req.body;
+
     if (!name || !email || !username || !password) {
       return res.status(402).json({
         success: false,
@@ -17,11 +19,17 @@ exports.registerUser = async (req, res) => {
         message: "User Already Exists",
       });
     }
+
+    const myCloud = await cloudinary.v2.uploader.upload(profilePic, {
+      folder: "profile_images",
+    });
+
     const user = new User({
       name,
       email,
       password,
       username,
+      profilePic: myCloud.secure_url,
     });
     await user.save();
     const token = await user.generateToken();
@@ -44,7 +52,6 @@ exports.registerUser = async (req, res) => {
     });
   }
 };
-
 
 exports.loginUser = async (req, res) => {
   try {
@@ -154,7 +161,6 @@ exports.deleteUser = async (req, res) => {
   }
 };
 
-
 exports.followUnfollowUser = async (req, res) => {
   try {
     const { id } = req.params;
@@ -190,7 +196,6 @@ exports.followUnfollowUser = async (req, res) => {
   }
 };
 
-
 exports.updateProfile = async (req, res) => {
   try {
     const { name, email, password, bio } = req.body;
@@ -217,7 +222,6 @@ exports.updateProfile = async (req, res) => {
     });
   }
 };
-
 
 exports.getUserProfile = async (req, res) => {
   try {

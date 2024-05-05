@@ -1,11 +1,39 @@
-import { Flex, Image, useColorMode } from "@chakra-ui/react";
+import {
+  Button,
+  Flex,
+  Image,
+  useColorMode,
+  useDisclosure,
+} from "@chakra-ui/react";
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import {useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useSelector } from "react-redux";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverHeader,
+  PopoverBody,
+  PopoverArrow,
+  PopoverCloseButton,
+} from "@chakra-ui/react";
 
 const Header = () => {
   const { colorMode, toggleColorMode } = useColorMode();
+  const { isAuthenticated } = useSelector((state) => state.userData);
 
-  
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    const { data } = await axios.post(`/api/v1/user/logout`, {
+      withCredentials: "include",
+    });
+    console.log(data);
+  };
+
   return (
     <>
       <Flex justifyContent={"center"} mt={6} mb={"12"}>
@@ -16,9 +44,33 @@ const Header = () => {
           alt="logo"
           onClick={toggleColorMode}
         />
-        <Link to={"/adjsdjsd"}>
-          <button>Visit Profile Page</button>
-        </Link>
+
+        {isAuthenticated && (
+          <Flex ml={"auto"}>
+            <Popover>
+              <PopoverTrigger>
+                <Button>Profile</Button>
+              </PopoverTrigger>
+              <PopoverContent>
+                <PopoverArrow />
+                <PopoverCloseButton />
+                <PopoverHeader
+                  sx={{ cursor: "pointer" }}
+                  onClick={() => navigate("/profile")}
+                >
+                  Profile
+                </PopoverHeader>
+                <PopoverHeader
+                  onClick={handleLogout}
+                  sx={{ cursor: "pointer" }}
+                >
+                  Logout
+                </PopoverHeader>
+                <PopoverBody>Are you sure you want to logout?</PopoverBody>
+              </PopoverContent>
+            </Popover>
+          </Flex>
+        )}
       </Flex>
     </>
   );

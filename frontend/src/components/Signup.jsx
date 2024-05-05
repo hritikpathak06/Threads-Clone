@@ -13,14 +13,13 @@ import {
   Text,
   useColorModeValue,
   Link,
+  Image,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { setUser } from "../redux/slices/authSlice";
-
-
 
 export default function Signup({ setToggle }) {
   const [showPassword, setShowPassword] = useState(false);
@@ -29,7 +28,20 @@ export default function Signup({ setToggle }) {
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+  const [profilePic, setProfilePic] = useState(null);
 
+  const handleImageChnage = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfilePic(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  console.log("Profile Pic: ", profilePic);
 
   const handleRegister = async () => {
     const { data } = await axios.post("/api/v1/user/register", {
@@ -37,6 +49,7 @@ export default function Signup({ setToggle }) {
       email,
       password,
       username,
+      profilePic,
     });
     console.log(data);
     dispatch(
@@ -48,6 +61,7 @@ export default function Signup({ setToggle }) {
 
   return (
     <Flex align={"center"} justify={"center"}>
+      {profilePic && <Image src={profilePic} alt="Profile Pic" />}
       <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
         <Stack align={"center"}></Stack>
         <Box
@@ -106,6 +120,14 @@ export default function Signup({ setToggle }) {
                   </Button>
                 </InputRightElement>
               </InputGroup>
+            </FormControl>
+            <FormControl id="email" isRequired>
+              <FormLabel>Upload Profile</FormLabel>
+              <Input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChnage}
+              />
             </FormControl>
             <Stack spacing={10} pt={2}>
               <Button
