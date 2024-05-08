@@ -5,7 +5,7 @@ import UserPost from "../components/UserPost";
 const UserPage = () => {
   return (
     <>
-      <UserHeader />
+      <UserHeader myProfile={false} />
       <UserPost
         likes={1200}
         replies={481}

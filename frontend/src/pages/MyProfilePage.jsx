@@ -1,14 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import UserPost from "../components/UserPost";
 import UserHeader from "../components/UserHeader";
+import { useSelector } from "react-redux";
+import { Navigate, useParams } from "react-router-dom";
+import axios from "axios";
 
-const MyProfilePage = ({ user }) => {
-  console.log("Profile: ", user);
+const MyProfilePage = ({user:UserData}) => {
+
+  const { username } = useParams();
+  const [user, setUser] = useState(null);
+
+  const getUsersProfile = async () => {
+    const { data } = await axios.get(`/api/v1/user/profile/${username}`);
+    setUser(data.user);
+  };
+
+  useEffect(() => {
+      getUsersProfile();
+  }, []);
+
+  useEffect(() => {
+    if(UserData === null){
+      return <Navigate to={"/auth"}/>
+    }
+  },[])
+
   return (
     <>
-      <UserHeader  user={user}/>
+      <UserHeader user={user} myProfile = {true} />
       <UserPost
-        likes={1200}
+        likes={12000}
         replies={481}
         postImg="/post1.png"
         postTitle="Lets talk About threads"

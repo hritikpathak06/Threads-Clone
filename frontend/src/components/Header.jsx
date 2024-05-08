@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Button,
   Flex,
   Image,
@@ -6,7 +7,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import React from "react";
-import {useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import {
@@ -21,12 +22,8 @@ import {
 
 const Header = () => {
   const { colorMode, toggleColorMode } = useColorMode();
-  const { isAuthenticated } = useSelector((state) => state.userData);
-
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
+  const { isAuthenticated, user } = useSelector((state) => state.userData);
   const navigate = useNavigate();
-
   const handleLogout = async () => {
     const { data } = await axios.post(`/api/v1/user/logout`, {
       withCredentials: "include",
@@ -47,16 +44,22 @@ const Header = () => {
 
         {isAuthenticated && (
           <Flex ml={"auto"}>
-            <Popover>
+            <Popover size={30}>
               <PopoverTrigger>
-                <Button>Profile</Button>
+                <Button bg={"transparent"}>
+                  <Avatar
+                    src={user?.profilePic}
+                    alt="Profile pic"
+                    size={"sm"}
+                  />
+                </Button>
               </PopoverTrigger>
               <PopoverContent>
                 <PopoverArrow />
                 <PopoverCloseButton />
                 <PopoverHeader
                   sx={{ cursor: "pointer" }}
-                  onClick={() => navigate("/profile")}
+                  onClick={() => navigate(`/profile/${user.username}`)}
                 >
                   Profile
                 </PopoverHeader>
@@ -66,7 +69,6 @@ const Header = () => {
                 >
                   Logout
                 </PopoverHeader>
-                <PopoverBody>Are you sure you want to logout?</PopoverBody>
               </PopoverContent>
             </Popover>
           </Flex>

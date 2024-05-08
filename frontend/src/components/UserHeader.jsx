@@ -11,13 +11,14 @@ import {
   VStack,
   useToast,
 } from "@chakra-ui/react";
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React, { useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 import { BsInstagram } from "react-icons/bs";
 import { CgMoreO } from "react-icons/cg";
 
-const UserHeader = ({user}) => {
+const UserHeader = ({ user, myProfile }) => {
   const toast = useToast();
+  const navigate = useNavigate();
 
   const copyUrl = () => {
     const currentUrl = window.location.href;
@@ -38,10 +39,10 @@ const UserHeader = ({user}) => {
         <Flex justifyContent={"space-between"} w={"full"}>
           <Box>
             <Text fontSize={"2xl"} fontWeight={"bold"}>
-              Mark Zuckerberg
+              {user?.name}
             </Text>
             <Flex gap={2} alignItems={"center"}>
-              <Text fontSize={"small"}>markxuckeberg</Text>
+              <Text fontSize={"small"}>{user?.username}</Text>
               <Text
                 fontSize={"x-small"}
                 bg={"gray.dark"}
@@ -55,19 +56,17 @@ const UserHeader = ({user}) => {
           </Box>
           <Avatar
             name="Mark Zukerberg"
-            src="/zuck-avatar.png"
+            src={user?.profilePic}
             size={{
               base: "md",
               md: "xl",
             }}
           />
         </Flex>
-        <Text>
-          Co-founder, excetuive officer of threads and ceo of facebook
-        </Text>
+        <Text>{user?.bio}</Text>
         <Flex w={"full"} justifyContent={"space-between"}>
           <Flex gap={2} alignItems={"center"}>
-            <Text color={"gray.light"}>3.2k followers</Text>
+            <Text color={"gray.light"}>{user?.followers.length} followers</Text>
             <Box w={1} height={1} bg={"gray.light"} borderRadius={"full"}></Box>
             <NavLink color={"gray.light"}>instagram.com</NavLink>
           </Flex>
@@ -85,6 +84,9 @@ const UserHeader = ({user}) => {
                     <MenuItem onClick={copyUrl} bg={"transparent"}>
                       Copy Link
                     </MenuItem>
+                    {myProfile && (
+                      <MenuItem bg={"transparent"} onClick={() => navigate("/update-profile")}>Update Profile</MenuItem>
+                    )}
                   </MenuList>
                 </Portal>
               </Menu>
