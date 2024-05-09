@@ -20,17 +20,32 @@ export default function EditProfile({ user }) {
   const [name, setName] = useState(user?.name);
   const [email, setEmail] = useState(user?.email);
   const [bio, setBio] = useState(user?.bio);
+  const [profilePic, setProfilePic] = useState(user?.profilePic);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
   const toast = useToast();
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfilePic(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleUpdate = async () => {
+    setLoading(true);
     const { data } = await axios.put(
       `/api/v1/user/update/profile/${user?._id}`,
       {
         name,
         email,
         bio,
+        profilePic,
       },
       {
         withCredentials: "include",
@@ -46,6 +61,7 @@ export default function EditProfile({ user }) {
       duration: 2000,
       isClosable: true,
     });
+    setLoading(false);
     navigate(`/profile/${user?._id}`);
   };
 
@@ -67,10 +83,18 @@ export default function EditProfile({ user }) {
         <FormControl id="userName">
           <Stack direction={["column", "row"]} spacing={6}>
             <Center>
-              <Avatar size="xl" src={user?.profilePic}></Avatar>
+              <Avatar size="xl" src={profilePic}></Avatar>
             </Center>
             <Center w="full">
-              <Button w="full">Change Icon</Button>
+              <Button w="full">
+                <Input
+                  type="file"
+                  accept="image/*"
+                  sx={{ opacity: 0 }}
+                  style={{ cursor: "pointer" }}
+                  onChange={handleImageChange}
+                />
+              </Button>
             </Center>
           </Stack>
         </FormControl>
@@ -124,6 +148,7 @@ export default function EditProfile({ user }) {
               bg: "blue.500",
             }}
             onClick={handleUpdate}
+            isLoading={loading}
           >
             Submit
           </Button>

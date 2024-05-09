@@ -7,6 +7,7 @@ import { setUser } from "./redux/slices/authSlice";
 
 import MyProfilePage from "./pages/MyProfilePage";
 import EditProfile from "./components/EditProfile";
+import CreatePost from "./components/CreatePost";
 const UserPage = lazy(() => import("./pages/UserPage"));
 const PostPage = lazy(() => import("./pages/PostPage"));
 const AuthPage = lazy(() => import("./pages/AuthPage"));
@@ -39,12 +40,14 @@ const App = () => {
     <>
       <Container maxW={"630px"}>
         <Header />
+        {user && <CreatePost />}
         <Routes>
           <Route path="/" element={<Homepage user={user} />} />
           <Route
             path="/update-profile"
             element={user ? <EditProfile user={user} /> : <AuthPage />}
           />
+
           <Route
             path="/profile/:username"
             element={user ? <MyProfilePage user={user} /> : <AuthPage />}

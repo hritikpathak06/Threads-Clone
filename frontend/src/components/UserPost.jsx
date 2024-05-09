@@ -4,13 +4,13 @@ import { NavLink } from "react-router-dom";
 import { BsThreeDots } from "react-icons/bs";
 import Actions from "./Actions";
 
-const UserPost = ({ likes, replies, postImg, postTitle }) => {
+const UserPost = ({ likes, replies, postImg, postTitle, user }) => {
   return (
     <>
       <NavLink to={"/markzuckerberg/post/1"}>
         <Flex gap={3} mb={4} py={5}>
           <Flex flexDirection={"column"} alignItems={"center"}>
-            <Avatar size={"md"} name="markzuckerberg" src="/zuck-avatar.png" />
+            <Avatar size={"md"} name="markzuckerberg" src={user.profilePic} />
             <Box width={"1px"} height={"full"} bg={"gray.light"} my={2}></Box>
             <Box position={"relative"} width={"full"}>
               <Avatar
@@ -47,7 +47,7 @@ const UserPost = ({ likes, replies, postImg, postTitle }) => {
             <Flex justifyContent={"space-between"} w={"full"}>
               <Flex width={"full"} alignItems={"center"}>
                 <Text fontSize={"sm"} fontWeight={"bold"}>
-                  markzuxkewrberg
+                  {user.username}
                 </Text>
                 <Image src="/verified.png" w={4} h={4} ml={1} />
               </Flex>

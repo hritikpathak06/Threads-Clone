@@ -1,13 +1,18 @@
 const Post = require("../schemas/postSchema");
 const User = require("../schemas/userSchema");
+const cloudinary = require("cloudinary");
 
 exports.createPost = async (req, res) => {
   try {
     const { postedBy, text, img } = req.body;
+
+    const myCloud = await cloudinary.v2.uploader.upload(img, {
+      folder: "thread_post",
+    });
     const post = new Post({
       postedBy: req.user._id,
       text,
-      img,
+      img: myCloud.secure_url,
     });
     await post.save();
     return res.status(201).json({
@@ -77,7 +82,7 @@ exports.deletePost = async (req, res) => {
 
 exports.getMyPost = async (req, res) => {
   try {
-    const posts = await Post.find({ postedBy: req.user._id });
+    const posts = await Post.find({ postedBy: req.user._id }).sort({createdAt:-1})
     if (!posts || posts.length === 0) {
       return res.status(404).json({
         success: false,
@@ -125,7 +130,6 @@ exports.likeUnlikePost = async (req, res) => {
   }
 };
 
-
 exports.replyToPost = async (req, res) => {
   try {
     const { text } = req.body;
@@ -166,8 +170,6 @@ exports.replyToPost = async (req, res) => {
   }
 };
 
-
-
 exports.getFeedPost = async (req, res) => {
   try {
     const userId = req.user._id;
@@ -196,7 +198,6 @@ exports.getFeedPost = async (req, res) => {
     });
   }
 };
-
 
 exports.getUserPost = async (req, res) => {
   try {

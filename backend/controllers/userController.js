@@ -198,7 +198,7 @@ exports.followUnfollowUser = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
   try {
-    const { name, email, password, bio } = req.body;
+    const { name, email, password, bio, profilePic } = req.body;
     const user = await User.findById(req.user._id);
     if (req.params.id !== req.user._id.toString()) {
       return res.status({
@@ -206,9 +206,17 @@ exports.updateProfile = async (req, res) => {
         message: "You Can't Update Other Profile",
       });
     }
+
     user.name = name || user.name;
     user.email = email || user.email;
     user.bio = bio || user.bio;
+
+    if (profilePic) {
+      const cloudData = await cloudinary.v2.uploader.upload(profilePic, {
+        folder: "profile_images",
+      });
+      user.profilePic = cloudData.secure_url || user.profilePic;
+    }
     await user.save();
     return res.status(200).json({
       success: true,
