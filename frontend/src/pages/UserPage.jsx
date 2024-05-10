@@ -1,30 +1,56 @@
-import React from "react";
-import UserHeader from "../components/UserHeader";
+import React, { useEffect, useState } from "react";
 import UserPost from "../components/UserPost";
+import UserHeader from "../components/UserHeader";
+import { useSelector } from "react-redux";
+import { Navigate, useParams } from "react-router-dom";
+import axios from "axios";
 
-const UserPage = () => {
+const UserPage = ({ user: UserData }) => {
+  const { username } = useParams();
+  const [user, setUser] = useState(null);
+  const [posts, setPosts] = useState([]);
+
+  const getUsersProfile = async () => {
+    const { data } = await axios.get(`/api/v1/user/profile/${username}`);
+    setUser(data.user);
+  };
+
+  const getMyPosts = async () => {
+    const { data } = await axios.get(`/api/v1/post/user/${username}`, {
+      withCredentials: "include",
+    });
+    setPosts(data.posts);
+  };
+
+  useEffect(() => {
+    getUsersProfile();
+    getMyPosts();
+  }, []);
+
+  useEffect(() => {
+    if (UserData === null) {
+      return <Navigate to={"/auth"} />;
+    }
+  }, []);
+
   return (
     <>
-      <UserHeader myProfile={false} />
-      <UserPost
-        likes={1200}
-        replies={481}
-        postImg="/post1.png"
-        postTitle="Lets talk About threads"
-      />
-      <UserPost
-        likes={1600}
-        replies={481}
-        postImg="/post2.png"
-        postTitle="Nice Picture"
-      />
-      <UserPost
-        likes={1900}
-        replies={481}
-        postImg="/post3.png"
-        postTitle="I love this guy"
-      />
-      <UserPost likes={120} replies={11} postTitle="Good Foiod" />
+      <UserHeader user={user} myProfile={true} />
+      {posts.map((p, index) => (
+        <>
+          <h3>{p._id}</h3>
+          <UserPost
+            key={index}
+            post={p}
+            likes={p.likes.length}
+            replies={p.replies.length}
+            postImg={p?.img || ""}
+            postTitle={p.text}
+            user={user}
+            postId={p._id}
+          />
+        </>
+      ))}
     </>
   );
 };

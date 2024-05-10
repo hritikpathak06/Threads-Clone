@@ -53,7 +53,7 @@ const App = () => {
             element={user ? <MyProfilePage user={user} /> : <AuthPage />}
           />
           <Route path="/auth" element={<AuthPage user={user} />} />
-          <Route path="/:username" element={<UserPage />} />
+          <Route path="/user/:username" element={<UserPage />} />
           <Route
             path="/:username/post/:pid"
             element={isAuthenticated ? <PostPage /> : <AuthPage />}

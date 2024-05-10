@@ -1,16 +1,38 @@
 import { Avatar, Box, Flex, Image, Text } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { BsThreeDots } from "react-icons/bs";
 import Actions from "./Actions";
+import { useSelector } from "react-redux";
 
-const UserPost = ({ likes, replies, postImg, postTitle, user }) => {
+const UserPost = ({
+  likes,
+  replies,
+  postImg,
+  postTitle,
+  user,
+  postId,
+  post,
+}) => {
+  const [liked, setLiked] = useState(false);
+  const { user: myself } = useSelector((state) => state.userData);
+
+  useEffect(() => {
+    if (post.likes.includes(myself?._id)) {
+      setLiked(true);
+    }
+  }, [liked, myself]);
+
   return (
     <>
       <NavLink to={"/markzuckerberg/post/1"}>
         <Flex gap={3} mb={4} py={5}>
           <Flex flexDirection={"column"} alignItems={"center"}>
-            <Avatar size={"md"} name="markzuckerberg" src={user.profilePic} />
+            <Avatar
+              size={"md"}
+              name="markzuckerberg"
+              src={user.profilePic || ""}
+            />
             <Box width={"1px"} height={"full"} bg={"gray.light"} my={2}></Box>
             <Box position={"relative"} width={"full"}>
               <Avatar
@@ -62,7 +84,13 @@ const UserPost = ({ likes, replies, postImg, postTitle, user }) => {
             <Box borderRadius={6} overflow={"hidden"} border={"1px solid gray"}>
               <Image src={postImg} w={"full"} />
             </Box>
-            <Actions likes={likes} replies={replies} />
+            <Actions
+              likes={likes}
+              replies={replies}
+              liked={liked}
+              postId={postId}
+              setLiked={setLiked}
+            />
           </Flex>
         </Flex>
       </NavLink>

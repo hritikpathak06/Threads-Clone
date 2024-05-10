@@ -37,14 +37,19 @@ const MyProfilePage = ({ user: UserData }) => {
     <>
       <UserHeader user={user} myProfile={true} />
       {posts.map((p, index) => (
-        <UserPost
-          key={index}
-          likes={p.likes.length}
-          replies={p.replies.length}
-          postImg={p?.img || ""}
-          postTitle={p.text}
-          user={user}
-        />
+        <>
+          <h3>{p._id}</h3>
+          <UserPost
+            key={index}
+            post={p}
+            likes={p.likes.length}
+            replies={p.replies.length}
+            postImg={p?.img || ""}
+            postTitle={p.text}
+            user={user}
+            postId={p._id}
+          />
+        </>
       ))}
     </>
   );
